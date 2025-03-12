@@ -2,7 +2,7 @@
 
 A multi-agent system powered by CrewAI that analyzes Python projects, indexes code, generates and runs pytest test cases, and produces comprehensive documentation.
 
-![Code Analyzer Banner](https://via.placeholder.com/800x200.png?text=CrewAI+Code+Analyzer)
+![code-analyzer.jpg](https://postimg.cc/CR07DbGK)
 
 ## 🌟 Features
 
