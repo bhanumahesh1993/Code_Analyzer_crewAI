@@ -1,0 +1,137 @@
+{
+  "design_patterns": {
+    "singleton": {
+      "description": "Ensures a class has only one instance and provides a global point of access to it.",
+      "indicators": [
+        "private constructor",
+        "static instance variable",
+        "static getInstance method"
+      ],
+      "example": "class Singleton:\n    _instance = None\n\n    def __new__(cls, *args, **kwargs):\n        if cls._instance is None:\n            cls._instance = super().__new__(cls)\n        return cls._instance"
+    },
+    "factory": {
+      "description": "Creates objects without specifying the exact class to create.",
+      "indicators": [
+        "create method",
+        "factory method",
+        "different implementations based on parameters"
+      ],
+      "example": "def create_shape(shape_type):\n    if shape_type == 'circle':\n        return Circle()\n    elif shape_type == 'square':\n        return Square()\n    else:\n        return None"
+    },
+    "observer": {
+      "description": "Allows an object to publish changes to its state, and other objects to react to those changes.",
+      "indicators": [
+        "subscribe/unsubscribe methods",
+        "notify method",
+        "callback registration"
+      ],
+      "example": "class Publisher:\n    def __init__(self):\n        self._observers = []\n    \n    def register(self, observer):\n        self._observers.append(observer)\n    \n    def notify_all(self, *args, **kwargs):\n        for observer in self._observers:\n            observer.notify(self, *args, **kwargs)"
+    },
+    "strategy": {
+      "description": "Defines a family of algorithms, encapsulates each one, and makes them interchangeable.",
+      "indicators": [
+        "algorithm interface",
+        "interchangeable implementations",
+        "context class with strategy attribute"
+      ],
+      "example": "class Context:\n    def __init__(self, strategy):\n        self._strategy = strategy\n    \n    def execute_strategy(self, data):\n        return self._strategy.execute(data)"
+    },
+    "decorator": {
+      "description": "Attaches additional responsibilities to an object dynamically.",
+      "indicators": [
+        "wrapper classes",
+        "same interface as wrapped component",
+        "forwarding method calls"
+      ],
+      "example": "class BaseComponent:\n    def operation(self):\n        pass\n\nclass Decorator(BaseComponent):\n    def __init__(self, component):\n        self._component = component\n    \n    def operation(self):\n        return self._component.operation()"
+    }
+  },
+  "code_smells": {
+    "long_method": {
+      "description": "Method that is too long and does too many things.",
+      "indicators": [
+        "high line count (>20-30 lines)",
+        "multiple responsibilities",
+        "many local variables",
+        "complex conditional logic"
+      ],
+      "recommendation": "Split into smaller, focused methods."
+    },
+    "large_class": {
+      "description": "Class that has too many responsibilities.",
+      "indicators": [
+        "many methods and properties",
+        "low cohesion between methods",
+        "multi-purpose class",
+        "very long file"
+      ],
+      "recommendation": "Split into smaller, more focused classes."
+    },
+    "duplicate_code": {
+      "description": "Similar code structure in more than one place.",
+      "indicators": [
+        "copied and pasted code",
+        "similar logic in different methods/classes",
+        "same constants used in multiple places"
+      ],
+      "recommendation": "Extract common code into reusable methods or classes."
+    },
+    "feature_envy": {
+      "description": "Method that seems more interested in another class than the one it's in.",
+      "indicators": [
+        "method using many methods/properties from another class",
+        "excessive calls to getters of another object"
+      ],
+      "recommendation": "Move the method to the class it's more interested in."
+    },
+    "dead_code": {
+      "description": "Code that is never executed.",
+      "indicators": [
+        "unused variables",
+        "unused methods",
+        "unreachable code",
+        "commented out code"
+      ],
+      "recommendation": "Remove dead code to improve readability and maintainability."
+    }
+  },
+  "testing_patterns": {
+    "arrange_act_assert": {
+      "description": "Pattern for organizing unit tests into three parts: setup, action, and verification.",
+      "indicators": [
+        "setup/arrange section at the beginning",
+        "single action in the middle",
+        "assertions at the end"
+      ],
+      "example": "def test_withdraw():\n    # Arrange\n    account = Account(balance=100)\n    \n    # Act\n    account.withdraw(50)\n    \n    # Assert\n    assert account.balance == 50"
+    },
+    "test_fixture": {
+      "description": "Resources needed for testing that must be set up before tests and cleaned up afterward.",
+      "indicators": [
+        "setup/teardown methods",
+        "test context creation",
+        "resource initialization"
+      ],
+      "example": "@pytest.fixture\ndef database_connection():\n    conn = connect_to_test_db()\n    yield conn\n    conn.close()"
+    },
+    "test_double": {
+      "description": "Objects that stand in for real objects during testing.",
+      "indicators": [
+        "mocks",
+        "stubs",
+        "fakes",
+        "dependency injection for testing"
+      ],
+      "example": "@patch('module.Service')\ndef test_client(mock_service):\n    mock_service.get_data.return_value = {'test': 'data'}\n    client = Client(mock_service)\n    result = client.process()\n    assert result == 'processed data'"
+    },
+    "parameterized_test": {
+      "description": "Running the same test logic with different inputs.",
+      "indicators": [
+        "test with multiple inputs",
+        "data-driven testing",
+        "test matrices"
+      ],
+      "example": "@pytest.mark.parametrize('input,expected', [\n    (1, 1),\n    (2, 4),\n    (3, 9)\n])\ndef test_square(input, expected):\n    assert square(input) == expected"
+    }
+  }
+}

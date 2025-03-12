@@ -1,0 +1,63 @@
+# Task definitions for the CrewAI Code Analyzer
+# Tasks are executed in sequence by specialized agents
+
+read_code:
+  description: >
+    Read all Python code files from the project located at '{project_path}'.
+    Use EXACTLY this path: '{project_path}'.
+    Make sure to explore all subdirectories and collect all .py files.
+    Create a comprehensive inventory of all Python files in the project.
+  expected_output: >
+    A JSON string containing all the Python files in the project,
+    with file paths as keys and file contents as values.
+  agent: "code_reader"
+  context: []
+  
+analyze_code:
+  description: >
+    Analyze each Python file to extract functions, classes, methods, and dependencies.
+    Identify the key components and relationships in the code.
+    Detect design patterns, potential code smells, and architecture.
+    Focus on understanding the overall structure and interactions between components.
+  expected_output: >
+    A list of JSON objects, each containing the analysis of a Python file,
+    including functions, classes, methods, imports, and identified patterns.
+  agent: "code_analyzer"
+  context: ["read_code"]
+
+generate_tests:
+  description: >
+    Generate pytest test cases for the analyzed code. Save the test files to the 'tests' directory.
+    Create appropriate test files, fixtures, and assertions based on the code analysis.
+    Ensure tests cover key functionality, edge cases, and follow testing best practices.
+    Aim for good test coverage while keeping tests maintainable.
+  expected_output: >
+    A list of generated test file paths and a summary of the test coverage.
+    Include information about the testing approach and any assumptions made.
+  agent: "test_writer"
+  context: ["analyze_code"]
+
+run_tests:
+  description: >
+    Run the generated test cases using pytest and collect the results.
+    Execute tests in the 'tests' directory with appropriate flags for detail.
+    Capture all test results including successes, failures, errors, and coverage.
+  expected_output: >
+    Complete test results including successes, failures, and error messages.
+    Summary of test coverage and execution time.
+  agent: "test_runner"
+  context: ["generate_tests"]
+
+generate_documentation:
+  description: >
+    Create comprehensive documentation based on the code analysis and test results.
+    Save the documentation to 'documentation.md'.
+    Include code structure, relationships, test results, and recommendations.
+    Follow industry standard documentation practices.
+    Structure the documentation for both high-level overview and detailed reference.
+  expected_output: >
+    A comprehensive Markdown file documenting the project structure, code components,
+    test results, and suggestions for improvement.
+    Include diagrams, tables, and other visual aids where appropriate.
+  agent: "documentation_specialist"
+  context: ["analyze_code", "run_tests"]
